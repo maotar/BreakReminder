@@ -9,4 +9,4 @@ Press once to open/close settings.
 
 Press twice to reset interval timer.
 
-Press once while break countdown timer is running skips the break.
+Press once while break countdown timer is running to skip the break.
