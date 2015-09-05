@@ -1,5 +1,5 @@
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-;#Warn  ; Recommended for catching common errors.
+;#Warn  ; Recommended for catching common errors, enable during debugging
 #Persistent ; Keep the script running until the user exits it.
 #SingleInstance
 
