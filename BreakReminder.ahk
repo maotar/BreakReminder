@@ -36,7 +36,7 @@ SysGet, Mon, MonitorWorkArea
 
 Bot = %MonBottom%
 Width = %MonRight%
-y := Bot - 140 
+y := Bot - 180 
 x := Width - 220  
 
 ; Settings GUI
@@ -59,7 +59,10 @@ Gui, Add, Progress, xm-10 x20 y45 w100 BackgroundE6E6E6 h10 cA6A6A6 vInterval Ra
 Gui, Add, Text, cGray x170 y102 w20
 Gui, Add, Progress, xm-10 x20 y105 w100 BackgroundE6E6E6 h10 cA6A6A6 vDuration Range0-15, 5
 
-Gui,show, x%x% y%y% w220 h140,LB
+Gui, Font, s7 cGray, Verdana
+Gui, Add, Checkbox, x20 y145 vRunAtStart gSetStart
+Gui, Add, Text, cGray x50 y145, Run at Windows startup
+Gui,show, x%x% y%y% w220 h180,LB
 
 ; If first run set controls to default, else read settings from ini and set controls to retrieved values
 
@@ -190,6 +193,7 @@ GetMouse(max) ; calculate position in 'slider' based on mouseposition in GUI, ma
 
 	return M
 }
+
 
 CheckTime: ; Set timer for lockscreen 
 
@@ -336,7 +340,29 @@ Else
     return
 }
 
+SetStart:
 
+Gui, Submit, NoHide
+
+If RunAtStart = 1
+{
+    SplitPath, A_Scriptname, , , , OutNameNoExt 
+    LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
+    IfNotExist, %LinkFile% 
+      FileCreateShortcut, %A_ScriptFullPath%, %LinkFile% 
+    SetWorkingDir, %A_ScriptDir%
+}
+else
+{
+    SplitPath, A_Scriptname, , , , OutNameNoExt 
+    LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
+    IfExist, %LinkFile% 
+      FileDelete, %LinkFile% 
+    SetWorkingDir, %A_ScriptDir%
+}
+
+
+return
 
 
 
