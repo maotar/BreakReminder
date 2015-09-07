@@ -3,15 +3,6 @@
 #Persistent ; Keep the script running until the user exits it.
 #SingleInstance
 
-; Set script to start at Windows A_Startup
-
-SplitPath, A_Scriptname, , , , OutNameNoExt 
-LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
-IfNotExist, %LinkFile% 
-  FileCreateShortcut, %A_ScriptFullPath%, %LinkFile% 
-SetWorkingDir, %A_ScriptDir%
-
-
 IniFile = %A_AppData%\BreakReminder\Settings.ini
 
 ; Open settings GUI if first run, else read settings from ini and run break timer
