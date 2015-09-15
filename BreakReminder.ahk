@@ -38,17 +38,17 @@ Gui, Font, s7, Verdana
 
 Gui, Add, Text,  cGray x210 y1 , X
 
-Gui, Add, Text, cGray x20 y80 , Break duration in minutes
-Gui, Add, Text, cGray x20 y20 , Maximum working time in minutes
+Gui, Add, Text, cGray x20 y80 , Time to move, stretch, stand, etc.
+Gui, Add, Text, cGray x20 y20 , Time until next reminder
 
 Gui, Font, s11, Verdana
 
 Gui, Add, Text, cGray x170 y42 w20 
-Gui, Add, Progress, xm-10 x20 y45 w100 BackgroundE6E6E6 h10 cA6A6A6 vInterval Range0-60, 50
+Gui, Add, Progress, xm-10 x20 y45 w100 BackgroundE6E6E6 h10 cA6A6A6 vInterval Range0-60, 60
 
 
 Gui, Add, Text, cGray x170 y102 w20
-Gui, Add, Progress, xm-10 x20 y105 w100 BackgroundE6E6E6 h10 cA6A6A6 vDuration Range0-15, 5
+Gui, Add, Progress, xm-10 x20 y105 w100 BackgroundE6E6E6 h10 cA6A6A6 vDuration Range0-10, 5
 
 Gui, Font, s7 cGray, Verdana
 Gui, Add, Checkbox, x20 y145 vRunAtStart gSetStart
@@ -59,7 +59,7 @@ Gui,show, x%x% y%y% w220 h180,LB
 
 IfNotExist, %IniFile%
 {
-	ControlSetText, Static4, 50 , LB
+	ControlSetText, Static4, 60 , LB
 	ControlSetText, Static5, 5 , LB
 	Xi = 50
 	Xd = 5
@@ -124,7 +124,7 @@ If !GetKeyState("LButton", "P")
    return
 }
 
-Xi := GetMouse(60)
+Xi := GetMouseInterval(60)
 
 GuiControl,, Interval, %Xi% ; Sets progress bar to mouse position.
 ControlSetText, Static4, %Xi% , LB ; Sets text behind bar to corresponding value
@@ -138,7 +138,7 @@ If !GetKeyState("LButton", "P")
    return
 }
 
-Xd := GetMouse(15)
+Xd := GetMouseDuration(10)
 GuiControl,, Duration, %Xd% ; Sets progress bar to mouse position.
 ControlSetText, Static5, %Xd% , LB ; Sets text behind bar to corresponding value
 return
@@ -167,7 +167,7 @@ If varExist("Xd")
 
 return
 
-GetMouse(max) ; calculate position in 'slider' based on mouseposition in GUI, max is maximum value of slider
+GetMouseDuration(max) ; calculate position in 'slider' based on mouseposition in GUI, max is maximum value of slider
 {
 	MouseGetPos, mX  ; Gets mouse position relative to the Window.
 
@@ -179,10 +179,28 @@ GetMouse(max) ; calculate position in 'slider' based on mouseposition in GUI, ma
 	If M > %max%
 		M := max
 
-	If M < 1
-		M = 1	
+	If M < 2
+		M = 2	
 
 	return M
+}
+
+GetMouseInterval(max) ; calculate position in 'slider' based on mouseposition in GUI, max is maximum value of slider
+{
+  MouseGetPos, mX  ; Gets mouse position relative to the Window.
+
+  M := (mX -20) / 100 * max
+  M := Round(M)
+
+  ; Restrict values to possible values in 'slider' 
+
+  If M > %max%
+    M := max
+
+  If M < 20
+    M = 20 
+
+  return M
 }
 
 
