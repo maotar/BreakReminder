@@ -62,7 +62,7 @@ IfNotExist, %IniFile%
 	ControlSetText, Static4, 50 , LB
 	ControlSetText, Static5, 5 , LB
 	Xi = 50
-	Xd = 5
+	Xd = 5	
 	Gosub, WriteSettings
 }
 else
@@ -72,6 +72,10 @@ else
 	ControlSetText, Static5, %DurationRead% , LB
 	GuiControl,, Interval, %IntervalRead%
 	GuiControl,, Duration, %DurationRead%
+	if(WinStartRead = 1){		
+		Control, Check, , Button1, LB		
+	}
+		
 }
 
 return
@@ -147,10 +151,12 @@ ReadSettings: ; Read ini file
 
 IniRead, IntervalRead, %IniFile%, Intervals, Interval1
 IniRead, DurationRead, %IniFile%, Durations, Duration1
-
+IniRead, WinStartRead, %IniFile%, Options, WinStartup
 return
 
 WriteSettings: ; Write ini file
+
+Gui, Submit, NoHide
 
 ; Create folder if not exists, IniWrite cannot create folder
 
@@ -164,6 +170,9 @@ If varExist("Xi")
 
 If varExist("Xd")
  	IniWrite, %Xd%, %IniFile%, Durations, Duration1
+
+
+ 	IniWrite, %RunAtStart%, %IniFile%, Options, WinStartup
 
 return
 
